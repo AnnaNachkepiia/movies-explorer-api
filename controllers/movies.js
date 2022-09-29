@@ -3,7 +3,6 @@ const { BadRequest } = require('../errors/BadRequest');
 const { NotFound } = require('../errors/NotFound');
 const { Forbidden } = require('../errors/Forbidden');
 
-
 const getMovie = (req, res, next) => {
   Movie.find({})
     .then((movies) => res.send(movies.reverse()))

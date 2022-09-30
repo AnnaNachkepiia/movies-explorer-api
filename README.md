@@ -1,7 +1,9 @@
 # movies-explorer-api
 
+* Публичный IP-адрес сервера: 84.201.177.21
+
 * Фронтенд домен проекта
-nachkepia.movies-explorer.nomoredomains.icu
+http://nachkepia.movies-explorer.nomoredomains.icu
 
 * Бэкенд домен
-api.nachkepia.movies-exp.nomoredomains.icu
+http://api.nachkepia.movies-exp.nomoredomains.icu

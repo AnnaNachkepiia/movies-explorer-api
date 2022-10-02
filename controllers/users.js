@@ -4,7 +4,13 @@ const User = require('../models/user');
 const { BadRequest } = require('../errors/BadRequest');
 const { NotFound } = require('../errors/NotFound');
 const { Conflict } = require('../errors/Conflict');
-const { Unauthorized } = require('../errors/Unauthorized');
+const {
+  BAD_REQ_USER_CREATE,
+  DOUBLE_EMAIL,
+  USER_NOT_FOUND,
+  USERID_NOT_FOUND,
+  BAD_REQ_USER_UPDATE,
+} = require('../consts/errorMessages');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -22,9 +28,7 @@ const login = (req, res, next) => {
       );
       res.send({ token });
     })
-    .catch(() => {
-      next(new Unauthorized('Неправильные почта или пароль'));
-    });
+    .catch(next);
 };
 
 const createUser = (req, res, next) => {
@@ -36,18 +40,21 @@ const createUser = (req, res, next) => {
       password: hash,
       name,
     }))
-    .then((user) => res.send(user))
+    .then((user) => {
+      const userData = {
+        email: user.email,
+        name: user.name,
+        _id: user._id,
+      };
+      res.send(userData);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(
-          new BadRequest(
-            'Переданы некорректные данные при создании пользователя',
-          ),
-        );
+        next(new BadRequest(BAD_REQ_USER_CREATE));
         return;
       }
       if (err.code === 11000) {
-        next(new Conflict('Пользователь с таким email уже существует'));
+        next(new Conflict(DOUBLE_EMAIL));
         return;
       }
       next(err);
@@ -58,7 +65,7 @@ const getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFound('Запрашиваемый пользователь не найден');
+        throw new NotFound(USER_NOT_FOUND);
       } else {
         res.send(user);
       }
@@ -74,18 +81,17 @@ const updateProfile = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFound('Пользователь с указанным _id не найден');
+        throw new NotFound(USERID_NOT_FOUND);
       } else {
         res.send({ user });
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(
-          new BadRequest('Переданы некорректные данные при обновлении профиля'),
-        );
-      }
-      next(err);
+      if (err.code === 11000) {
+        next(new Conflict(DOUBLE_EMAIL));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequest(BAD_REQ_USER_UPDATE));
+      } else next(err);
     });
 };
 

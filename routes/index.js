@@ -1,41 +1,22 @@
 const router = require('express').Router();
-const { Joi, celebrate } = require('celebrate');
 const usersRouter = require('./users');
 const moviesRouter = require('./movies');
 const auth = require('../middlewares/auth');
 const { login, createUser } = require('../controllers/users');
 const { NotFound } = require('../errors/NotFound');
-// const regexUrl = require('../consts/regex');
+const {
+  loginValidate,
+  createUserValidate,
+} = require('../middlewares/validation');
+const { NOT_FOUND_MESSAGE } = require('../consts/errorMessages');
 
-router.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-    }),
-  }),
-  login,
-);
-
-router.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-    }),
-  }),
-  createUser,
-);
-
+router.post('/signin', loginValidate, login);
+router.post('/signup', createUserValidate, createUser);
 router.use(auth);
-
 router.use('/', usersRouter);
 router.use('/', moviesRouter);
 router.use('/*', (req, res, next) => {
-  next(new NotFound('Страница не найдена'));
+  next(new NotFound(NOT_FOUND_MESSAGE));
 });
 
 module.exports = router;

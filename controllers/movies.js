@@ -2,47 +2,26 @@ const Movie = require('../models/movie');
 const { BadRequest } = require('../errors/BadRequest');
 const { NotFound } = require('../errors/NotFound');
 const { Forbidden } = require('../errors/Forbidden');
+const {
+  BAD_REQ_MOVIE_CREATE,
+  MOVIEID_NOT_FOUND,
+  FORBIDDEN_DEL,
+  MOVIE_NOT_FOUND,
+} = require('../consts/errorMessages');
 
 const getMovie = (req, res, next) => {
-  Movie.find({})
+  const userId = req.user._id;
+  Movie.findById(userId)
     .then((movies) => res.send(movies.reverse()))
     .catch(next);
 };
 
 const createMovie = (req, res, next) => {
-  const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-  } = req.body;
-  Movie.create({
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-    owner: req.user._id,
-  })
+  Movie.create({ ...req.body, owner: req.user._id })
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(
-          new BadRequest('Переданы некорректные данные при создании фильма'),
-        );
+        next(new BadRequest(BAD_REQ_MOVIE_CREATE));
         return;
       }
       next(err);
@@ -53,9 +32,9 @@ const deleteMoviebyId = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFound('Фильм с указанным _id не найден');
+        throw new NotFound(MOVIEID_NOT_FOUND);
       } else if (movie.owner.toString() !== req.user._id) {
-        throw new Forbidden('Этот фильм удалить невозможно');
+        throw new Forbidden(FORBIDDEN_DEL);
       } else {
         Movie.deleteOne({ _id: req.params.movieId })
           .then(() => {
@@ -66,7 +45,7 @@ const deleteMoviebyId = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Запрашиваемая карточка не найдена'));
+        next(new BadRequest(MOVIE_NOT_FOUND));
         return;
       }
       next(err);

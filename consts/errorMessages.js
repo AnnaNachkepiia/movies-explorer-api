@@ -8,6 +8,10 @@ const BAD_REQ_MOVIE_CREATE = 'Переданы некорректные данн
 const MOVIEID_NOT_FOUND = 'Фильм с указанным _id не найден';
 const FORBIDDEN_DEL = 'Этот фильм удалить невозможно';
 const MOVIE_NOT_FOUND = 'Запрашиваемый фильм не найден';
+const SERVER_ERR = 'На сервере произошла ошибка';
+const EMAIL_OR_PASSWD_ERR = 'Неправильные почта или пароль';
+const AUTH_ERR = 'Необходима авторизация';
+const LOGOUT_MESSAGE = 'Вы вышли из аккаунта';
 
 module.exports = {
   NOT_FOUND_MESSAGE,
@@ -20,5 +24,8 @@ module.exports = {
   MOVIEID_NOT_FOUND,
   FORBIDDEN_DEL,
   MOVIE_NOT_FOUND,
-
+  SERVER_ERR,
+  EMAIL_OR_PASSWD_ERR,
+  AUTH_ERR,
+  LOGOUT_MESSAGE,
 };

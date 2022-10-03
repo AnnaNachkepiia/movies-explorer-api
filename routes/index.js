@@ -2,7 +2,7 @@ const router = require('express').Router();
 const usersRouter = require('./users');
 const moviesRouter = require('./movies');
 const auth = require('../middlewares/auth');
-const { login, createUser } = require('../controllers/users');
+const { login, createUser, logout } = require('../controllers/users');
 const { NotFound } = require('../errors/NotFound');
 const {
   loginValidate,
@@ -15,6 +15,7 @@ router.post('/signup', createUserValidate, createUser);
 router.use(auth);
 router.use('/', usersRouter);
 router.use('/', moviesRouter);
+router.post('/signout', logout);
 router.use('/*', (req, res, next) => {
   next(new NotFound(NOT_FOUND_MESSAGE));
 });

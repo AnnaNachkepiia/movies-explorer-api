@@ -10,6 +10,7 @@ const {
   USER_NOT_FOUND,
   USERID_NOT_FOUND,
   BAD_REQ_USER_UPDATE,
+  LOGOUT_MESSAGE,
 } = require('../consts/errorMessages');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -26,9 +27,23 @@ const login = (req, res, next) => {
           expiresIn: '7d',
         },
       );
+      res.cookie('access_token', token, {
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
       res.send({ token });
     })
     .catch(next);
+};
+
+const logout = (req, res) => {
+  res.clearCookie('access_token', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  }).send(LOGOUT_MESSAGE);
 };
 
 const createUser = (req, res, next) => {
@@ -100,4 +115,5 @@ module.exports = {
   createUser,
   getUserInfo,
   updateProfile,
+  logout,
 };

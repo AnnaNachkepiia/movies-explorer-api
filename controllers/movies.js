@@ -10,9 +10,8 @@ const {
 } = require('../consts/errorMessages');
 
 const getMovie = (req, res, next) => {
-  const userId = req.user._id;
-  Movie.findById(userId)
-    .then((movies) => res.send(movies.reverse()))
+  Movie.find({ owner: req.user._id })
+    .then((movies) => res.send(movies))
     .catch(next);
 };
 

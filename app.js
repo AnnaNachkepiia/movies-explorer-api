@@ -8,6 +8,7 @@ const errorsType = require('./middlewares/errorsType');
 const router = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { FILM_DB_DEV } = require('./consts/dbPath');
+const limiter = require('./middlewares/rateLimiter');
 
 const { NODE_ENV, FILM_DB } = process.env;
 const { PORT = 3000 } = process.env;
@@ -26,6 +27,7 @@ app.get('/crash-test', () => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
+app.use(limiter);
 app.use(router);
 app.use(errorLogger);
 app.use(errors());

@@ -7,3 +7,5 @@ http://nachkepia.movies-explorer.nomoredomains.icu
 
 * Бэкенд домен
 http://api.nachkepia.movies-exp.nomoredomains.icu
+
+* Установить зависимости npm install

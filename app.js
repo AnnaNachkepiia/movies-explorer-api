@@ -11,7 +11,7 @@ const { FILM_DB_DEV } = require('./consts/dbPath');
 const limiter = require('./middlewares/rateLimiter');
 
 const { NODE_ENV, FILM_DB } = process.env;
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 
 mongoose.connect(NODE_ENV === 'production' ? FILM_DB : FILM_DB_DEV, {

@@ -1,11 +1,16 @@
-# movies-explorer-api
+# Movies-explorer API (дипломный проект)
 
-* Публичный IP-адрес сервера: 62.84.127.129
+Бэкенд часть сайта-визитки с приложением для поиска фильмов и возможностью сохранить в избранное.
+Создание сервера и прикрепление домена API и публичного домена. Авторизация и аутентификация пользователя, сохранение и удаление фильмов в базе данных.
 
-* Фронтенд домен проекта
-http://nachkepia.movies-explorer.nomoredomains.icu
+## Используемые технологии:
+/ JS / React / Git / Express.js / mongoDB /
 
-* Бэкенд домен
-http://api.nachkepia.movies-exp.nomoredomains.icu
+##  Фронтенд домен проекта
+  http://nachkepia.movies-explorer.nomoredomains.icu
 
-* Установить зависимости npm install
+## Бэкенд домен
+  http://api.nachkepia.movies-exp.nomoredomains.icu
+
+## Установить зависимости
+npm install

@@ -28,6 +28,6 @@
   http://api.nachkepia.movies-exp.nomoredomains.icu
 
 ### Установка и запуск проекта:
-- Клонировать репозиторий: git clone 
-- Установить зависимости: npm install
-- Запустить сервер: npm run start
+- Клонировать репозиторий: `git clone` 
+- Установить зависимости: `npm install`
+- Запустить сервер: `npm run start`
